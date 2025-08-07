@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addTodo, removeTodo, toggleTodo } from "../redux/features/todos/todoSlice";
+import { addTodo, fetchTodos, removeTodo, toggleTodo } from "../redux/features/todos/todoSlice";
 
 const TodoList = () => {
   const { items, loading, error } = useSelector((state) => state.todos);
   const dispatch = useDispatch();
   const[text, setText] = useState("")
+
+  useEffect(()=>{
+        dispatch(fetchTodos())
+  },[dispatch])
 
   const handleAddTodo = ()=>{
     dispatch(addTodo(text))
@@ -41,8 +45,8 @@ const TodoList = () => {
         <ul>
           {items.map((todo, idx) => (
             <li key={todo.id} className="flex items-center justify-start space-x-4 px-4 py-2 border-b">
-
-                <span onClick={()=>dispatch(toggleTodo(todo.id))} className={`${todo.completed ? "line-through text-gray-500" : ""}`}>{todo.text}</span>
+                <span>{idx + 1}.</span>
+                <span onClick={()=>dispatch(toggleTodo(todo.id))} className={`${todo.completed ? "line-through text-gray-500" : ""}`}>{todo.title || todo.text}</span>
                 <button onClick={()=>dispatch(removeTodo(todo.id))} className="text-red-500 hover:underline">Remove</button>
             </li>
           ))}

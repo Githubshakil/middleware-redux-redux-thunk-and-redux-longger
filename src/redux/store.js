@@ -1,10 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit'
 import todoReducer from '../redux/features/todos/todoSlice'
+import { createLogger } from 'redux-logger'
 
-const store =configureStore({
+
+//creat a logger middleware
+
+const logger = createLogger()
+
+
+const store = configureStore({
   reducer: {
-    todos:todoReducer
-  }
+    todos: todoReducer
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger)
 })
-
 export default store
